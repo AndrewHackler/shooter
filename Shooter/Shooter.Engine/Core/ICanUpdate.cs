@@ -1,4 +1,4 @@
-namespace Shooter.Engine
+namespace Shooter.Engine.Core
 {
     public interface ICanUpdate
     {

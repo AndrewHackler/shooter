@@ -11,7 +11,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Third Party", "Third Party"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shooter.Engine", "Shooter.Engine\Shooter.Engine.csproj", "{181C445C-2244-4996-9797-C78E6AE7B23E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shooter.Game", "Shooter.Game\Shooter.Game.csproj", "{640EB89F-54E8-426A-8BD6-9FF063821AE1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shooter.Gameplay", "Shooter.Game\Shooter.Gameplay.csproj", "{640EB89F-54E8-426A-8BD6-9FF063821AE1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

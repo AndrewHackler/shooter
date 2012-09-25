@@ -4,9 +4,9 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Shooter.Engine;
 
-namespace Shooter.Game
+namespace Shooter.Gameplay
 {
-    public class RelativeRobotController : ICanUpdate
+    public class RelativeRobotController // : ICanUpdate
     {
         private readonly Body body;
 

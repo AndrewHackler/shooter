@@ -1,8 +1,9 @@
 using System;
 using FarseerPhysics.Dynamics;
 using Shooter.Engine;
+using Shooter.Engine.Core;
 
-namespace Shooter.Game
+namespace Shooter.Gameplay
 {
     public class RobotBodyLinker : ICanUpdate
     {
@@ -18,7 +19,6 @@ namespace Shooter.Game
         public void Update(float dt)
         {
             this.robot.Position = this.body.Position;
-            this.robot.Rotation = this.body.Rotation;
 
             if (this.body.LinearVelocity.LengthSquared() > 0)
             {

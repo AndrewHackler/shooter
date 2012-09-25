@@ -1,6 +1,6 @@
 using Microsoft.Xna.Framework;
 
-namespace Shooter.Game
+namespace Shooter.Gameplay
 {
     public class Robot
     {

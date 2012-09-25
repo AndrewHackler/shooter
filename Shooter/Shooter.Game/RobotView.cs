@@ -1,25 +1,33 @@
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Shooter.Engine;
+using Shooter.Engine.Scene;
+using Shooter.Engine.Xna.Extensions;
 
-namespace Shooter.Game
+namespace Shooter.Gameplay
 {
-    public class RobotView : ICanDraw
+    public class RobotView : IDrawableSceneObject
     {
+        private readonly ShooterEngine engine;
         private readonly Robot robot;
-        private readonly SpriteBatch batch;
         private Texture2D texture;
 
-        public RobotView(Robot robot, SpriteBatch batch, Texture2D texture)
+        public RobotView(ShooterEngine engine, Robot robot)
         {
+            this.engine = engine;
             this.robot = robot;
-            this.batch = batch;
-            this.texture = texture;
+            this.texture = engine.Game.Content.Load<Texture2D>("Textures/Player");
         }
 
-        public void Draw(float f)
+        public bool Intersects(object bounds)
         {
-            batch.Draw(texture,
+            return true;
+        }
+
+        public void Draw(float dt)
+        {
+            engine.SpriteBatch.Draw(texture,
                        this.robot.Position,
                        new Rectangle(64, 0, 64, 64),
                        Color.White,
@@ -28,7 +36,7 @@ namespace Shooter.Game
                        Vector2.One / texture.Size() * 2,
                        SpriteEffects.None, 0f);
 
-            batch.Draw(texture,
+            engine.SpriteBatch.Draw(texture,
                        this.robot.Position,
                        new Rectangle(0, 64, 64, 64),
                        Color.White,

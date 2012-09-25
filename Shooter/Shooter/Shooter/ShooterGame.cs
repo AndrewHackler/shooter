@@ -1,86 +1,63 @@
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using FarseerPhysics.Dynamics;
-using FarseerPhysics.Factories;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Shooter.Engine;
-using Shooter.Game;
+using Shooter.Engine.Cameras;
+using Shooter.Engine.Viewports;
+using Shooter.Gameplay;
 
 namespace Shooter
 {
-    public class ShooterGame : Microsoft.Xna.Framework.Game
+    public class ShooterGame : Game
     {
         private GraphicsDeviceManager graphics;
-        private SpriteBatch spriteBatch;
-        private Texture2D playerTexture;
-        private World world;
+        private ShooterEngine engine;
+        private RobotProxy robot;
 
-        protected LinkedList<ICanDraw> Views { get; set; }
+        private CameraController camController;
+        private Camera camera1;
+        private Camera camera2;
+        private Camera camera3;
 
         public ShooterGame()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
 
-            this.Controllers = new Collection<ICanUpdate>();
-            this.PhysicalLinkers = new Collection<ICanUpdate>();
-            this.Views = new LinkedList<ICanDraw>();
+            this.IsMouseVisible = true;
+
+            engine = new ShooterEngine(this);
+            this.Components.Add(engine);
         }
 
         protected override void LoadContent()
         {
-            spriteBatch = new SpriteBatch(GraphicsDevice);
-            playerTexture = Content.Load<Texture2D>("Textures/Player");
+            // Cameras and viewports
+            camera1 = new Camera(engine);
+            camera2 = new Camera(engine) { Zoom = 0.70f };
+            camera3 = new Camera(engine) { Zoom = 0.65f };
 
-            world = new World(Vector2.Zero);
+            camController = new CameraController(camera1);
 
-            camera = new Camera(this.GraphicsDevice);
+            this.engine.PerspectiveManager.Perspectives.Clear();
+            this.engine.PerspectiveManager.Perspectives.AddRange(new[]
+                {
+                    new Perspective(camera1, new Viewport(000, 000, 400, 240)),
+                    new Perspective(camera1, new Viewport(400, 000, 400, 240)),
+                    new Perspective(camera2, new Viewport(000, 240, 400, 240)),
+                    new Perspective(camera3
+                        , new Viewport(400, 240, 400, 240))
+                });
 
-            AddBody(this.Controllers, this.PhysicalLinkers, this.Views, world, spriteBatch, playerTexture, camera);
+            base.LoadContent();
 
-            this.IsMouseVisible = true;
+            // Tiler
+            var tiler = new Tiler(engine);
+            this.engine.SceneManager.Add(tiler);
+
+            // Robot
+            robot = RobotFactory.Spawn(engine);
         }
-
-        private static Random random = new Random();
-
-        private static void AddBody(ICollection<ICanUpdate> controllers, ICollection<ICanUpdate> linkers, LinkedList<ICanDraw> views, World world, SpriteBatch spriteBatch, Texture2D playerTexture, Camera camera)
-        {
-            // Model
-            var robot = new Robot();
-
-            // Physical Body
-            var robotBody = BodyFactory.CreateCircle(world, 0.5f, 1);
-            robotBody.BodyType = BodyType.Dynamic;
-            robotBody.AngularDamping = 5.0f;
-            robotBody.LinearDamping = 5.00f;
-
-            // View
-            var robotView = new RobotView(robot, spriteBatch, playerTexture);
-
-            // Controller
-            var robotController = new AbsoluteRobotController(robot, robotBody, camera);
-
-            // Linker for Physical Body and Model
-            var robotBodyLinker = new RobotBodyLinker(robot, robotBody);
-
-            // Add controllers, linkers, and views
-            controllers.Add(robotController);
-            linkers.Add(robotBodyLinker);
-            views.AddFirst(robotView);
-
-            world.BodyList.Add(robotBody);
-        }
-
-        // (world, controllers, linkers, views)
-
-        protected ICollection<ICanUpdate> PhysicalLinkers { get; set; }
-
-        private KeyboardState oldState;
-        private KeyboardState newState;
-        private Camera camera;
 
         protected override void Update(GameTime gameTime)
         {
@@ -90,43 +67,28 @@ namespace Shooter
 
             var dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-
-            if(Keyboard.GetState().IsKeyDown(Keys.N))
+            if (Keyboard.GetState().IsKeyDown(Keys.N))
             {
-                AddBody(this.Controllers, this.PhysicalLinkers, this.Views, world, spriteBatch, playerTexture, camera);
+                RobotFactory.Spawn(this.engine);
             }
 
-            foreach (var controller in this.Controllers)
-            {
-                controller.Update(dt);
-            }
+            this.camController.Update(dt);
 
-            world.Step(dt);
+            this.engine.Update(gameTime);
 
-            foreach (var linker in this.PhysicalLinkers)
-            {
-                linker.Update(dt);
-            }
+            this.camera2.Position += (this.robot.Body.Position + this.robot.Body.LinearVelocity / 2 - this.camera2.Position) * 5 * dt;
+            this.camera3.Position = this.robot.Body.Position;
 
             base.Update(gameTime);
         }
 
-        protected ICollection<ICanUpdate> Controllers { get; set; }
-
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            this.GraphicsDevice.Clear(ClearOptions.Target, Color.CornflowerBlue, 0f, 0);
 
-            var dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
+            this.robot.Controller.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
 
-            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, RasterizerState.CullNone, null, camera.GetMatrix());
-
-            foreach (var view in this.Views)
-            {
-                view.Draw(dt);
-            }
-
-            spriteBatch.End();
+            this.engine.Draw(gameTime);
 
             base.Draw(gameTime);
         }

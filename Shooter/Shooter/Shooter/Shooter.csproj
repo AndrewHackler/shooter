@@ -147,9 +147,9 @@
       <Project>{181C445C-2244-4996-9797-C78E6AE7B23E}</Project>
       <Name>Shooter.Engine</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Shooter.Game\Shooter.Game.csproj">
+    <ProjectReference Include="..\..\Shooter.Game\Shooter.Gameplay.csproj">
       <Project>{640EB89F-54E8-426A-8BD6-9FF063821AE1}</Project>
-      <Name>Shooter.Game</Name>
+      <Name>Shooter.Gameplay</Name>
     </ProjectReference>
     <ProjectReference Include="..\Farseer\Farseer Physics XNA.csproj">
       <Project>{0A850700-1ABB-4288-A391-6726B90EBEB9}</Project>
@@ -160,9 +160,6 @@
       <Name>Shooter.Content %28Content%29</Name>
       <XnaReferenceType>Content</XnaReferenceType>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\Microsoft.Xna.GameStudio.targets" />
