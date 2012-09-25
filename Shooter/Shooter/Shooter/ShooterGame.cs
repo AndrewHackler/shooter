@@ -10,8 +10,8 @@ namespace Shooter
 {
     public class ShooterGame : Game
     {
-        private GraphicsDeviceManager graphics;
-        private ShooterEngine engine;
+        private readonly GraphicsDeviceManager graphics;
+        private readonly ShooterEngine engine;
         private RobotProxy robot;
 
         private CameraController camController;
