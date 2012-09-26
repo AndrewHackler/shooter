@@ -147,7 +147,7 @@
       <Project>{181C445C-2244-4996-9797-C78E6AE7B23E}</Project>
       <Name>Shooter.Engine</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Shooter.Game\Shooter.Gameplay.csproj">
+    <ProjectReference Include="..\Shooter.Gameplay\Shooter.Gameplay.csproj">
       <Project>{640EB89F-54E8-426A-8BD6-9FF063821AE1}</Project>
       <Name>Shooter.Gameplay</Name>
     </ProjectReference>
