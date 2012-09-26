@@ -7,7 +7,7 @@ namespace Shooter.Engine.Xna.Extensions
     {
         public static Matrix GetUndoMatrix(Viewport viewport)
         {
-            return Matrix.CreateScale(1f, -1f, 1f) *
+            return Matrix.CreateScale(0.5f, -0.5f, 0.5f) *
                    Matrix.CreateTranslation(0.5f, 0.5f, 0.0f) *
                    Matrix.CreateScale(viewport.Width, viewport.Height, 1f);
         }

@@ -7,6 +7,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using FarseerPhysics.Dynamics;
+using Krypton;
+using Krypton.Components;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Shooter.Engine.Core;
@@ -31,6 +33,9 @@ namespace Shooter.Engine
 
         public List<ICanUpdate> Linkers { get; private set; }
 
+        public LightmapGeneratorComponent LightmapGenerator { get; private set; }
+        protected LightmapPresenterComponent LightmapPresenter { get; set; }
+
         public ShooterEngine(Game game)
             : base(game)
         {
@@ -45,6 +50,13 @@ namespace Shooter.Engine
             this.SceneManager = new SceneManager();
             this.InputManager = new InputManager(this);
             this.Linkers = new List<ICanUpdate>();
+
+            var lightmapPasses = this.PerspectiveManager.Select(x => new LightmapPass(x.Viewport, x.GetMatrix()));
+            this.LightmapGenerator = new LightmapGeneratorComponent(this.Game, lightmapPasses);
+            this.LightmapPresenter = new LightmapPresenterComponent(this.Game, this.LightmapGenerator);
+
+            this.LightmapGenerator.Initialize();
+            this.LightmapPresenter.Initialize();
         }
 
         public override void Update(GameTime gameTime)
@@ -65,6 +77,10 @@ namespace Shooter.Engine
         public override void Draw(GameTime gameTime)
         {
             var dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+            var oldViewport = this.GraphicsDevice.Viewport;
+
+            this.LightmapGenerator.Draw(gameTime);
 
             foreach (var perspective in this.PerspectiveManager)
             {
@@ -87,6 +103,10 @@ namespace Shooter.Engine
 
                 this.SpriteBatch.End();
             }
+
+            this.GraphicsDevice.Viewport = oldViewport;
+
+            this.LightmapPresenter.Draw(gameTime);
 
             base.Draw(gameTime);
         }

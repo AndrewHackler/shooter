@@ -1,5 +1,6 @@
 using System;
 using FarseerPhysics.Dynamics;
+using Krypton.Lights;
 using Shooter.Engine;
 using Shooter.Gameplay;
 
@@ -7,7 +8,8 @@ namespace Shooter
 {
     public class RobotProxy : IDisposable
     {
-        public RobotBodyLinker Linker { get; private set; }
+        public RobotLinker Linker { get; private set; }
+        public PointLight Light { get; set; }
         public ShooterEngine Engine { get; private set; }
 
         public Robot Model { get; private set; }
@@ -17,7 +19,7 @@ namespace Shooter
 
         public bool HasBeenInitialized { get; private set; }
 
-        public RobotProxy(ShooterEngine engine, Robot model, RobotView view, AbsoluteRobotController controller, Body body, RobotBodyLinker linker)
+        public RobotProxy(ShooterEngine engine, Robot model, RobotView view, AbsoluteRobotController controller, Body body, RobotLinker linker, PointLight light)
         {
             if(engine == null)
             {
@@ -30,6 +32,7 @@ namespace Shooter
             this.Controller = controller;
             this.Body = body;
             this.Linker = linker;
+            this.Light = light;
         }
 
         public void Initialize()
@@ -51,9 +54,14 @@ namespace Shooter
                 this.Engine.World.BodyList.Add(this.Body);
             }
 
-            if(this.Linker != null && !this.Engine.Linkers.Contains(this.Linker))
+            if (this.Linker != null && !this.Engine.Linkers.Contains(this.Linker))
             {
                 this.Engine.Linkers.Add(this.Linker);
+            }
+
+            if (this.Light != null && !this.Engine.LightmapGenerator.Lights.Contains(this.Light))
+            {
+                this.Engine.LightmapGenerator.Lights.Add(this.Light);
             }
         }
 
