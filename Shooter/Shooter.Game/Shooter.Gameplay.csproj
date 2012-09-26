@@ -96,21 +96,25 @@
     <Compile Include="CameraController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Robot.cs" />
-    <Compile Include="RobotBodyLinker.cs" />
     <Compile Include="RelativeRobotController.cs" />
     <Compile Include="RobotFactory.cs" />
+    <Compile Include="RobotLinker.cs" />
     <Compile Include="RobotProxy.cs" />
     <Compile Include="RobotView.cs" />
     <Compile Include="Tiler.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Farseer\Farseer Physics XNA.csproj">
+      <Project>{0A850700-1ABB-4288-A391-6726B90EBEB9}</Project>
+      <Name>Farseer Physics XNA</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Krypton\Krypton.csproj">
+      <Project>{EE23CC89-8068-4505-8498-7E30D1A1FC65}</Project>
+      <Name>Krypton</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Shooter.Engine\Shooter.Engine.csproj">
       <Project>{181C445C-2244-4996-9797-C78E6AE7B23E}</Project>
       <Name>Shooter.Engine</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Shooter\Farseer\Farseer Physics XNA.csproj">
-      <Project>{0A850700-1ABB-4288-A391-6726B90EBEB9}</Project>
-      <Name>Farseer Physics XNA</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

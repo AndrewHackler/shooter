@@ -106,11 +106,14 @@
     <Compile Include="Xna.Extensions\SpriteBatchExtensions.cs" />
     <Compile Include="Xna.Extensions\Texture2DExtensions.cs" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
-    <ProjectReference Include="..\Shooter\Farseer\Farseer Physics XNA.csproj">
+    <ProjectReference Include="..\Farseer\Farseer Physics XNA.csproj">
       <Project>{0A850700-1ABB-4288-A391-6726B90EBEB9}</Project>
       <Name>Farseer Physics XNA</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Krypton\Krypton.csproj">
+      <Project>{EE23CC89-8068-4505-8498-7E30D1A1FC65}</Project>
+      <Name>Krypton</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
