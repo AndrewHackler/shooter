@@ -8,13 +8,14 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Shooter.Engine;
 using Shooter.Engine.Cameras;
+using Shooter.Engine.Core;
 
 namespace Shooter.Gameplay
 {
     /// <summary>
     /// TODO: Update summary.
     /// </summary>
-    public class CameraController // : ICanUpdate
+    public class CameraController : ICanUpdate
     {
         private readonly Camera camera;
 
@@ -75,9 +76,9 @@ namespace Shooter.Gameplay
                 angularVelocity -= angularSpeed;
             }
 
-            this.camera.Zoom += zoomVelocity*dt;
-            this.camera.Rotation += angularVelocity*dt;
-            this.camera.Position += linearVelocity*linearSpeed*dt;
+            this.camera.Zoom += zoomVelocity * dt;
+            this.camera.Rotation += angularVelocity * dt;
+            this.camera.Position += linearVelocity * linearSpeed * dt;
         }
     }
 }

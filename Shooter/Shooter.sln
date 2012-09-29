@@ -1,8 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Third Party", "Third Party", "{1C0C155E-704B-4AF6-B712-3BB34AF220E5}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shooter.Engine", "Shooter.Engine\Shooter.Engine.csproj", "{181C445C-2244-4996-9797-C78E6AE7B23E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Farseer Physics XNA", "Farseer\Farseer Physics XNA.csproj", "{0A850700-1ABB-4288-A391-6726B90EBEB9}"
@@ -46,9 +44,5 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{0A850700-1ABB-4288-A391-6726B90EBEB9} = {1C0C155E-704B-4AF6-B712-3BB34AF220E5}
-		{EE23CC89-8068-4505-8498-7E30D1A1FC65} = {1C0C155E-704B-4AF6-B712-3BB34AF220E5}
 	EndGlobalSection
 EndGlobal

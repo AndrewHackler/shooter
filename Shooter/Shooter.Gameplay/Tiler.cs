@@ -2,6 +2,7 @@ using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Shooter.Engine;
+using Shooter.Engine.Core;
 using Shooter.Engine.Scene;
 using Shooter.Engine.Xna.Extensions;
 
@@ -18,7 +19,7 @@ namespace Shooter
             this.texture = engine.Game.Content.Load<Texture2D>("Textures/BackgroundTile");
         }
 
-        public bool Intersects(object bounds)
+        public bool Intersects(Rectangle2D bounds)
         {
             return true;
         }

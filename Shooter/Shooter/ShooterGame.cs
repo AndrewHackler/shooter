@@ -12,7 +12,6 @@ namespace Shooter
     {
         private readonly GraphicsDeviceManager graphics;
         private readonly ShooterEngine engine;
-        private RobotProxy robot;
 
         private CameraController camController;
         private Camera camera1;
@@ -38,12 +37,9 @@ namespace Shooter
         {
             if (this.graphics.IsFullScreen)
             {
-                this.graphics.PreferredBackBufferWidth = this.GraphicsDevice.DisplayMode.Width;
-                this.graphics.PreferredBackBufferHeight = this.GraphicsDevice.DisplayMode.Height;
+                //this.graphics.PreferredBackBufferWidth = this.GraphicsDevice.DisplayMode.Width;
+                //this.graphics.PreferredBackBufferHeight = this.GraphicsDevice.DisplayMode.Height;
             }
-
-            this.graphics.PreferredBackBufferWidth = this.Window.ClientBounds.Width;
-            this.graphics.PreferredBackBufferWidth = this.Window.ClientBounds.Height;
         }
 
         public void DeviceReset()
@@ -54,10 +50,10 @@ namespace Shooter
             this.engine.PerspectiveManager.Perspectives.Clear();
             this.engine.PerspectiveManager.Perspectives.AddRange(new[]
                 {
-                    new Perspective(camera1, new Viewport(0, 0, w, h)),
-                    new Perspective(camera1, new Viewport(w, 0, w, h)),
-                    new Perspective(camera2, new Viewport(0, h, w, h)),
-                    new Perspective(camera3, new Viewport(w, h, w, h)),
+                    new Perspective(camera1, new Viewport(0, 0, w*2, h*2)),
+                    //new Perspective(camera1, new Viewport(w, 0, w, h)),
+                    //new Perspective(camera2, new Viewport(0, h, w, h)),
+                    //new Perspective(camera3, new Viewport(w, h, w, h)),
                 });
         }
 
@@ -70,14 +66,13 @@ namespace Shooter
 
             camController = new CameraController(camera1);
 
+            this.engine.Controllers.Add(camController);
+
             base.LoadContent();
 
             // Tiler
             var tiler = new Tiler(engine);
             this.engine.SceneManager.Add(tiler);
-
-            // Robot
-            robot = RobotFactory.Spawn(engine);
 
             this.GraphicsDevice.Reset();
         }
@@ -92,7 +87,12 @@ namespace Shooter
 
             if (Keyboard.GetState().IsKeyDown(Keys.N))
             {
-                RobotFactory.Spawn(this.engine);
+                RobotFactory.SpawnPlayableRobot(this.engine);
+            }
+
+            if (Keyboard.GetState().IsKeyDown(Keys.M))
+            {
+                RobotFactory.SpawnDummyRobot(this.engine);
             }
 
             if (Keyboard.GetState().IsKeyDown(Keys.F) && !this.graphics.IsFullScreen)
@@ -105,12 +105,7 @@ namespace Shooter
                 this.graphics.ToggleFullScreen();
             }
 
-            this.camController.Update(dt);
-
             this.engine.Update(gameTime);
-
-            this.camera2.Position += (this.robot.Body.Position + this.robot.Body.LinearVelocity / 2 - this.camera2.Position) * 5 * dt;
-            this.camera3.Position = this.robot.Body.Position;
 
             base.Update(gameTime);
         }
@@ -119,7 +114,7 @@ namespace Shooter
         {
             this.GraphicsDevice.Clear(ClearOptions.Target, Color.CornflowerBlue, 0f, 0);
 
-            this.robot.Controller.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
+            // this.robot.Controller.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
 
             this.engine.Draw(gameTime);
 

@@ -25,6 +25,9 @@ namespace Krypton.Lights
         /// </summary>
         private float radius;
 
+        private float intensity;
+        private float fov;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="PointLightSolid"/> class.
         /// </summary>
@@ -98,7 +101,11 @@ namespace Krypton.Lights
         /// <summary>
         /// Gets or sets Intensity.
         /// </summary>
-        public float Intensity { get; set; }
+        public float Intensity
+        {
+            get { return intensity; }
+            set { intensity = MathHelper.Clamp(value, float.Epsilon, 10); }
+        }
 
         /// <summary>
         /// Gets IntensityFactor.
@@ -115,6 +122,20 @@ namespace Krypton.Lights
         /// Gets or Sets ShadowType.
         /// </summary>
         public ShadowType ShadowType { get; set; }
+
+        /// <summary>
+        /// Gets or Sets Rotation.
+        /// </summary>
+        public float Rotation { get; set; }
+
+        /// <summary>
+        /// Gets or Sets Fov.
+        /// </summary>
+        public float Fov
+        {
+            get { return fov; }
+            set { fov = MathHelper.Clamp(value, MathHelper.PiOver4, MathHelper.TwoPi); }
+        }
 
         /// <summary>
         /// Draws the light with shadows from the hulls
@@ -168,7 +189,7 @@ namespace Krypton.Lights
             foreach (var pass in lightmapEffect.CurrentTechnique.Passes)
             {
                 pass.Apply();
-                helper.DrawClippedFov(this.Position, 0f, this.Radius * 2, this.Color, MathHelper.TwoPi);
+                helper.DrawClippedFov(this.Position, this.Rotation, this.Radius * 2, this.Color, this.Fov);
             }
 
             // 6) Clear the target's alpha chanel

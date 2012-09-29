@@ -36,6 +36,8 @@ namespace Shooter.Engine
         public LightmapGeneratorComponent LightmapGenerator { get; private set; }
         protected LightmapPresenterComponent LightmapPresenter { get; set; }
 
+        public List<ICanUpdate> Controllers { get; private set; }
+
         public ShooterEngine(Game game)
             : base(game)
         {
@@ -47,9 +49,10 @@ namespace Shooter.Engine
             this.World = new World(Vector2.Zero);
             this.SpriteBatch = new SpriteBatch(this.Game.GraphicsDevice);
             this.PerspectiveManager = new PerspectiveManager();
-            this.SceneManager = new SceneManager();
+            this.SceneManager = new SceneManager(this);
             this.InputManager = new InputManager(this);
             this.Linkers = new List<ICanUpdate>();
+            this.Controllers = new List<ICanUpdate>();
 
             var lightmapPasses = this.PerspectiveManager.Select(x => new LightmapPass(x.Viewport, x.GetMatrix()));
             this.LightmapGenerator = new LightmapGeneratorComponent(this.Game, lightmapPasses);
@@ -62,6 +65,11 @@ namespace Shooter.Engine
         public override void Update(GameTime gameTime)
         {
             var dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+            foreach(var controller in this.Controllers)
+            {
+                controller.Update(dt);
+            }
 
             this.SceneManager.Update(dt);
             this.World.Step(dt);
@@ -80,7 +88,7 @@ namespace Shooter.Engine
 
             var oldViewport = this.GraphicsDevice.Viewport;
 
-            this.LightmapGenerator.Draw(gameTime);
+            // this.LightmapGenerator.Draw(gameTime);
 
             foreach (var perspective in this.PerspectiveManager)
             {
@@ -99,14 +107,14 @@ namespace Shooter.Engine
                     sbMatrix
                     );
 
-                this.SceneManager.Draw(dt);
+                this.SceneManager.Draw(dt, perspective.GetBounds());
 
                 this.SpriteBatch.End();
             }
 
             this.GraphicsDevice.Viewport = oldViewport;
 
-            this.LightmapPresenter.Draw(gameTime);
+            // this.LightmapPresenter.Draw(gameTime);
 
             base.Draw(gameTime);
         }

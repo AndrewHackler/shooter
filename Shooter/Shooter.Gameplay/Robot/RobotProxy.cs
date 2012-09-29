@@ -12,14 +12,14 @@ namespace Shooter
         public PointLight Light { get; set; }
         public ShooterEngine Engine { get; private set; }
 
-        public Robot Model { get; private set; }
+        public RobotModel Model { get; private set; }
         public RobotView View { get; private set; }
         public AbsoluteRobotController Controller { get; private set; }
         public Body Body { get; private set; }
 
         public bool HasBeenInitialized { get; private set; }
 
-        public RobotProxy(ShooterEngine engine, Robot model, RobotView view, AbsoluteRobotController controller, Body body, RobotLinker linker, PointLight light)
+        public RobotProxy(ShooterEngine engine, RobotModel model, RobotView view, AbsoluteRobotController controller, Body body, RobotLinker linker, PointLight light)
         {
             if(engine == null)
             {
@@ -47,6 +47,11 @@ namespace Shooter
             if (this.View != null)
             {
                 this.Engine.SceneManager.Add(this.View);
+            }
+
+            if (this.Controller != null && !this.Engine.Controllers.Contains(this.Controller))
+            {
+                this.Engine.Controllers.Add(this.Controller);
             }
 
             if (this.Body != null && !this.Engine.World.BodyList.Contains(this.Body))
@@ -81,7 +86,13 @@ namespace Shooter
 
             if (Body != null)
             {
+                // this.Body.Dispose();
                 this.Engine.World.RemoveBody(this.Body);
+            }
+
+            if(this.Light != null)
+            {
+                this.Engine.LightmapGenerator.Lights.Remove(this.Light);
             }
         }
     }
